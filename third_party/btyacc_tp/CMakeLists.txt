@@ -1,4 +1,4 @@
-include("../../../common/cmake/conf.cmake")
+include("../../conf.cmake")
 
 project(btyacc)
 
