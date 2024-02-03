@@ -106,6 +106,8 @@ void CppWriter::emit(const CppObj* cppObj, std::ostream& stm, CppIndent indentat
       return emitDocComment((CppDocComment*) cppObj, stm, indentation);
     case CppObjType::kUsingDecl:
       return emitUsingDecl((CppUsingDecl*) cppObj, stm, indentation);
+    case CppObjType::kUsingNamespaceDecl:
+      return emitUsingNamespaceDecl((CppUsingNamespaceDecl*) cppObj, stm, indentation);
     case CppObjType::kTypedefName:
       return emitTypedef((CppTypedefName*) cppObj, stm, indentation);
     case CppObjType::kTypedefNameList:
@@ -409,6 +411,13 @@ void CppWriter::emitUsingDecl(const CppUsingDecl* usingDecl,
     emit(usingDecl->cppObj_.get(), stm);
   }
   stm << ";\n";
+}
+
+void CppWriter::emitUsingNamespaceDecl(const CppUsingNamespaceDecl* usingDecl,
+                                       std::ostream&                stm,
+                                       CppIndent                    indentation /* = CppIndent()*/) const
+{
+  stm << indentation << "using namespace " << usingDecl->name_ << ";\n";
 }
 
 void CppWriter::emitTypedefList(const CppTypedefList* typedefList,

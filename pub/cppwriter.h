@@ -66,6 +66,9 @@ public:
   virtual void emitUsingDecl(const CppUsingDecl* usingDecl,
                              std::ostream&       stm,
                              CppIndent           indentation = CppIndent()) const;
+  virtual void emitUsingNamespaceDecl(const CppUsingNamespaceDecl* usingDecl,
+                                      std::ostream&                stm,
+                                      CppIndent                    indentation = CppIndent()) const;
   virtual void emitTypedefList(const CppTypedefList* typedefList,
                                std::ostream&         stm,
                                CppIndent             indentation = CppIndent()) const;
