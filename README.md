@@ -91,6 +91,27 @@ git clone https://github.com/satya-das/CppParser.git
 
 ## Configure and build
 
+### Windows Visual Studio
+
+[Install vcpkg](https://vcpkg.io/en/getting-started) to fetch boost
+
+```powershell
+vcpkg install boost-filesystem boost-program-options boost-system
+cd cppparser
+mkdir build
+cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE="[path to vcpkg]/scripts/buildsystems/vcpkg.cmake"
+cd build
+msbuild cppparser.sln
+```
+
+### Linux and others
+
+*For Ubuntu to fetch boost:*
+
+```sh
+sudo apt install libboost-system-dev libboost-filesystem-dev libboost-program-options-dev
+```
+
 ```sh
 cd cppparser
 mkdir builds
