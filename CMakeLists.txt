@@ -4,7 +4,7 @@ project(cppparser)
 
 enable_testing()
 
-include("../common/cmake/conf.cmake")
+include("conf.cmake")
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -17,9 +17,18 @@ add_subdirectory(third_party/btyacc_tp)
 
 add_definitions(-DBOOST_AUTO_LINK_NOMANGLE)
 
-add_subdirectory(../common/third_party/boost_tp/cmake  ${CMAKE_BINARY_DIR}/boost)
+#add_subdirectory(../common/third_party/boost_tp/cmake  ${CMAKE_BINARY_DIR}/boost)
 
-include_directories(../common/third_party)
+#include_directories(../common/third_party)
+
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost COMPONENTS filesystem program_options REQUIRED)
+
+if (NOT EXISTS "${CMAKE_SOURCE_DIR}/src/catch/catch.hpp")
+  file(DOWNLOAD "https://github.com/catchorg/Catch2/releases/download/v2.13.10/catch.hpp" "${CMAKE_SOURCE_DIR}/src/catch/catch.hpp")
+endif()
 
 #############################################
 ## CppParser
@@ -72,18 +81,19 @@ set(CPPPARSER_SOURCES
 )
 
 add_library(cppparser STATIC ${CPPPARSER_SOURCES})
-add_dependencies(cppparser btyacc boost_filesystem boost_program_options)
+#add_dependencies(cppparser btyacc boost_filesystem boost_program_options)
 target_link_libraries(cppparser
 	PUBLIC
-		boost_filesystem
-		boost_program_options
-		boost_system
+		${Boost_FILESYSTEM_LIBRARY}
+		${Boost_PROGRAM_OPTIONS_LIBRARY}
+		${Boost_System}
 )
 target_include_directories(
 	cppparser
 	PUBLIC
+		${Boost_INCLUDE_DIR}
 		pub
-		../common/third_party/boost_tp
+		#../common/third_party/boost_tp
 	PRIVATE
 		hack
 )
@@ -103,9 +113,9 @@ add_executable(cppparsertest
 target_link_libraries(cppparsertest
 	PRIVATE
 		cppparser
-		boost_filesystem
-		boost_program_options
-		boost_system
+		${Boost_FILESYSTEM_LIBRARY}
+		${Boost_PROGRAM_OPTIONS_LIBRARY}
+		${Boost_System}
 )
 
 set(E2E_TEST_DIR ${CMAKE_CURRENT_LIST_DIR}/test/e2e)
@@ -145,9 +155,9 @@ target_include_directories(cppparserunittest
 target_link_libraries(cppparserunittest
 	PRIVATE
 		cppparser
-		boost_filesystem
-		boost_program_options
-		boost_system
+		${Boost_FILESYSTEM_LIBRARY}
+		${Boost_PROGRAM_OPTIONS_LIBRARY}
+		${Boost_System}
 )
 set(UNIT_TEST_DIR ${CMAKE_CURRENT_LIST_DIR}/test/unit)
 add_test(
@@ -175,9 +185,9 @@ target_compile_definitions(cppparserembeddedsnippetvalidity
 target_link_libraries(cppparserembeddedsnippetvalidity
 	PRIVATE
 		cppparser
-		boost_filesystem
-		boost_program_options
-		boost_system
+		${Boost_FILESYSTEM_LIBRARY}
+		${Boost_PROGRAM_OPTIONS_LIBRARY}
+		${Boost_System}
 )
 
 if(NOT MSVC)
