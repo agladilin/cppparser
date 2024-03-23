@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4)
+cmake_minimum_required(VERSION 3.4...3.28)
 
 project(cppparser)
 
@@ -46,9 +46,9 @@ else()
 	message(STATUS "Found 'flex' as ${FLEX}")
 endif()
 
-set_source_files_properties(src/parser.tab.cpp GENERATED)
-set_source_files_properties(src/parser.lex.cpp GENERATED)
-set_source_files_properties(src/parser.tab.h GENERATED)
+set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}src/parser.tab.cpp GENERATED)
+set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}src/parser.lex.cpp GENERATED)
+set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}src/parser.tab.h GENERATED)
 
 add_custom_command(
 	OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/src/parser.tab.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/parser.tab.h
@@ -91,7 +91,7 @@ target_link_libraries(cppparser
 target_include_directories(
 	cppparser
 	PUBLIC
-		${Boost_INCLUDE_DIR}
+		${Boost_INCLUDE_DIRS}
 		pub
 		#../common/third_party/boost_tp
 	PRIVATE
@@ -102,6 +102,8 @@ target_compile_definitions(
 	PRIVATE
 		YY_NO_UNPUT
 )
+
+install(TARGETS cppparser PUBLIC_HEADER)
 
 #############################################
 ## CppParserTest
