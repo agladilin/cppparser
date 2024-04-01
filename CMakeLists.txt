@@ -103,7 +103,9 @@ target_compile_definitions(
 		YY_NO_UNPUT
 )
 
-install(TARGETS cppparser PUBLIC_HEADER)
+install(TARGETS cppparser)
+install(DIRECTORY pub/ DESTINATION include/cppparser)
+
 
 #############################################
 ## CppParserTest
