@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.4...3.28)
+cmake_policy(SET CMP0054 NEW)
+cmake_policy(SET CMP0048 NEW)
 
-project(cppparser)
+project(cppparser VERSION 0.1.0)
 
 enable_testing()
 
@@ -92,7 +94,8 @@ target_include_directories(
 	cppparser
 	PUBLIC
 		${Boost_INCLUDE_DIRS}
-		pub
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/pub>  
+		$<INSTALL_INTERFACE:${CPPPARSER_INSTALL_INCLUDE_DIR}>
 		#../common/third_party/boost_tp
 	PRIVATE
 		hack
@@ -103,9 +106,81 @@ target_compile_definitions(
 		YY_NO_UNPUT
 )
 
-install(TARGETS cppparser)
-install(DIRECTORY pub/ DESTINATION include/cppparser)
+#install(TARGETS cppparser EXPORT cppparser-config)
+#export(TARGETS cppparser NAMESPACE cppparser:: FILE "${CMAKE_CURRENT_BINARY_DIR}/cppparser-config.cmake")
+#install(DIRECTORY pub/ DESTINATION include/cppparser)
+#install(EXPORT cppparser-config DESTINATION cmake)
 
+# Install rule for headers
+install(
+	DIRECTORY pub/
+	DESTINATION ${CPPPARSER_INSTALL_INCLUDE_DIR}
+	COMPONENT Development
+)
+
+install(
+	TARGETS cppparser
+	EXPORT ${export_config_name}Targets
+	ARCHIVE DESTINATION ${CPPPARSER_INSTALL_LIBRARY_DIR} COMPONENT Development
+	LIBRARY DESTINATION ${CPPPARSER_INSTALL_LIBRARY_DIR} COMPONENT RuntimeLibraries
+	RUNTIME DESTINATION ${CPPPARSER_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+)
+
+#------------------------------------------------------------------------------
+# Configure <export_config_name>ConfigVersion.cmake common to build and install tree
+include(CMakePackageConfigHelpers)
+set(config_version_file ${PROJECT_BINARY_DIR}/${export_config_name}ConfigVersion.cmake)
+write_basic_package_version_file(
+	${config_version_file}
+	VERSION "${CPPPARSER_VERSION}"
+	COMPATIBILITY ExactVersion
+)
+
+#------------------------------------------------------------------------------
+# Export '<export_config_name>Targets.cmake' for a build tree
+export(
+	EXPORT ${PROJECT_NAME}Targets
+	FILE "${CMAKE_CURRENT_BINARY_DIR}/${export_config_name}Targets.cmake"
+)
+
+# Configure '<export_config_name>Config.cmake' for a build tree
+set(build_config ${CMAKE_BINARY_DIR}/${export_config_name}Config.cmake)
+configure_package_config_file(
+	${export_config_name}Config.cmake.in 
+	${build_config}
+	INSTALL_DESTINATION "${PROJECT_BINARY_DIR}"
+)
+
+#------------------------------------------------------------------------------
+# Export '<export_config_name>Targets.cmake' for an install tree
+install(
+	EXPORT ${export_config_name}Targets
+	FILE ${export_config_name}Targets.cmake
+	DESTINATION ${CPPPARSER_INSTALL_CONFIG_DIR}
+)
+
+set(install_config ${PROJECT_BINARY_DIR}/CMakeFiles/${export_config_name}Config.cmake)
+configure_package_config_file(
+	${export_config_name}Config.cmake.in 
+	${install_config}
+	INSTALL_DESTINATION ${CPPPARSER_INSTALL_CONFIG_DIR}
+)
+
+# Install config files
+install(
+	FILES ${config_version_file} ${install_config}
+	DESTINATION "${CPPPARSER_INSTALL_CONFIG_DIR}"
+)
+
+
+#include(CMakePackageConfigHelpers)
+#write_basic_package_version_file(
+#	"cppparserConfigVersion.cmake"
+#	VERSION ${cppparser_VERSION}
+#	COMPATIBILITY AnyNewerVersion)
+
+#install(FILES "${CMAKE_CURRENT_BINARY_DIR}/cppparser-config.cmake" DESTINATION lib/cmake/cppparser)
+# "${CMAKE_CURRENT_BINARY_DIR}/cppparserConfigVersion.cmake"
 
 #############################################
 ## CppParserTest

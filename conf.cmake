@@ -1,5 +1,4 @@
-cmake_minimum_required(VERSION 3.4...3.28)
-cmake_policy(SET CMP0054 NEW)
+
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
@@ -25,4 +24,22 @@ if(WIN32 OR CYGWIN )
 else()
 	set(DLLEXPORT "__attribute__((visibility (\"default\")))")
 	set(DLLIMPORT "")
+endif()
+
+set(export_config_name ${PROJECT_NAME})
+
+if(NOT DEFINED CPPPARSER_INSTALL_INCLUDE_DIR)
+  set(CPPPARSER_INSTALL_INCLUDE_DIR include)
+endif()
+
+if(NOT DEFINED CPPPARSER_INSTALL_BIN_DIR)
+  set(CPPPARSER_INSTALL_BIN_DIR bin)
+endif()
+
+if(NOT DEFINED CPPPARSER_INSTALL_LIBRARY_DIR)
+  set(CPPPARSER_INSTALL_LIBRARY_DIR lib)
+endif()
+
+if(NOT DEFINED CPPPARSER_INSTALL_CONFIG_DIR)
+  set(CPPPARSER_INSTALL_CONFIG_DIR ${CPPPARSER_INSTALL_LIBRARY_DIR}/cmake/${export_config_name})
 endif()
