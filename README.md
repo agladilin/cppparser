@@ -85,8 +85,7 @@ TEST_CASE("Parsing hello world program")
 ### Get the source
 
 ```sh
-git clone https://github.com/satya-das/common.git
-git clone https://github.com/satya-das/CppParser.git
+git clone https://github.com/agladilin/cpppqqarser.git
 ```
 
 ## Configure and build
@@ -102,6 +101,18 @@ mkdir build
 cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE="[path to vcpkg]/scripts/buildsystems/vcpkg.cmake"
 cd build
 msbuild cppparser.sln
+cmake --build . --config Debug --target install
+vcpkg install cppparser --overlay-ports=c:\dev\custom-overlay
+```
+
+To remove
+
+```powershell
+vcpkg remove cppparser
+del $VCPKG_ROOT\buildtrees\cppparser
+del $VCPKG_ROOT\packages\cppparser_x64-windows
+del $VCPKG_ROOT\downloads\agladilin-cppparser-0.1.0.tar.gz
+del C:\Users\<user>\AppData\Local\vcpkg\archives\19 # or whatever corresponding to package ABI hash in install log
 ```
 
 ### Linux and others
