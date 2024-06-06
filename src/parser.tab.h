@@ -134,7 +134,7 @@
 #define DTORDECL 387
 #define YYERRCODE 256
 
-#line 166 "/home/dassat/github/cppparser/src/parser.y"
+#line 166 "/home/user/dev/cppparser/src/parser.y"
 typedef union {
   CppToken                str;
   CppNtFuncDeclData       funcDeclData;
