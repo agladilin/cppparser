@@ -95,13 +95,16 @@ git clone https://github.com/agladilin/cpppqqarser.git
 [Install vcpkg](https://vcpkg.io/en/getting-started) to fetch boost
 
 ```powershell
-vcpkg install boost-filesystem boost-program-options boost-system
+vcpkg install boost-filesystem boost-program-options boost-system boost-date-time
 cd cppparser
 mkdir build
 cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE="[path to vcpkg]/scripts/buildsystems/vcpkg.cmake"
-cd build
-msbuild cppparser.sln
-cmake --build . --config Debug --target install
+#cd build
+#msbuild cppparser.sln
+cmake --build . --config Debug
+.\build\Debug\cppparsertest.exe
+.\build\Debug\cppparserunittest.exe
+cmake --build . --config Debug --target install  # requires administrator privileges
 vcpkg install cppparser --overlay-ports=c:\dev\custom-overlay
 ```
 
@@ -120,7 +123,7 @@ del C:\Users\<user>\AppData\Local\vcpkg\archives\19 # or whatever corresponding 
 *For Ubuntu to fetch boost:*
 
 ```sh
-sudo apt install libboost-system-dev libboost-filesystem-dev libboost-program-options-dev
+sudo apt install libboost-dev libboost-system-dev libboost-filesystem-dev libboost-program-options-dev
 ```
 
 ```sh
