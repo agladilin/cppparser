@@ -101,10 +101,10 @@ mkdir build
 cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE="[path to vcpkg]/scripts/buildsystems/vcpkg.cmake"
 #cd build
 #msbuild cppparser.sln
-cmake --build . --config Debug
+cmake --build build --config Debug
 .\build\Debug\cppparsertest.exe
 .\build\Debug\cppparserunittest.exe
-cmake --build . --config Debug --target install  # requires administrator privileges
+cmake --build build --config Debug --target install  # requires administrator privileges
 vcpkg install cppparser --overlay-ports=c:\dev\custom-overlay
 ```
 
